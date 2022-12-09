@@ -10,11 +10,15 @@ app.use(cookieParser());
 const product = require("./routes/productsRoute");
 const user = require("./routes/UserRoute");
 const order = require("./routes/orderRoute");
+const cart = require("./routes/cartRoute");
+
 
 
 app.use("/api/v2",product);
 app.use("/api/v2",user);
 app.use("/api/v2",order);
+app.use("/api/v2",cart);
+
 
 
 // it's for errorHandeling

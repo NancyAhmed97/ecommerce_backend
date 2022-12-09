@@ -26,7 +26,6 @@ class Features {
         removeFields.forEach((key) => delete queryCopy[key]);
 
         this.query = this.query.find(queryCopy);
-        console.log(queryCopy);
         return this;
     }
     pagination(resultPerPage){

@@ -68,7 +68,6 @@ const deleteProduct =catchAsyncErrors(async (req, res, next) => {
 // single Product details
 const getSingleProduct =catchAsyncErrors( async (req, res, next) => {
     const product = await Product.findById(req.params.id);
-    console.log(product);
     if (!product) {
       return next(new ErrorHandler("Product is not found with this id", 404));
 
@@ -136,7 +135,6 @@ const deleteReview = catchAsyncErrors(async (req, res, next) => {
   const reviews = product.reviews.filter(
     (rev) => rev._id.toString() !== req.query.id.toString()
   );
-console.log(reviews);
   let avg = 0;
 
   reviews.forEach((rev) => {
@@ -151,7 +149,6 @@ console.log(reviews);
   }
 
   const numOfReviews = reviews.length;
-console.log(req.query.productId);
   await Product.findByIdAndUpdate(
     req.query.productId,
     {
@@ -170,4 +167,27 @@ console.log(req.query.productId);
     success: true,
   });
 });
-module.exports={getAllProducts,createProduct,updateProduct,deleteProduct,getSingleProduct,createProductReview,getSingleProductReviews,deleteReview}
+//add favorite
+const addFavorite = catchAsyncErrors(async (req, res, next) => {
+  const product = await Product.findById(req.params.id).select("favorite");
+if(product){
+  product.favorite = !product.favorite;
+  product.save();
+  res.status(200).json({
+     success: true,
+     favoriteState:product.favorite
+   });
+}
+
+ 
+});
+//get all favorite
+const getFavorite = catchAsyncErrors(async (req, res, next) => {
+  const product=await Product.find({favorite:true})
+  res.status(200).json({
+    success: true,
+    favorite:product
+  });
+})
+
+module.exports={getAllProducts,createProduct,updateProduct,deleteProduct,getSingleProduct,createProductReview,getSingleProductReviews,deleteReview,addFavorite,getFavorite}
